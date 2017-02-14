@@ -1,0 +1,67 @@
+mongo-express
+
+mongo express 是一个基于Node.js和express的开源的MongoDB Web管理界面。
+
+https://github.com/mongo-express/mongo-express
+
+下载安装node
+https://nodejs.org/dist/v6.3.1/node-v6.3.1-linux-x64.tar.xz
+
+tar xvf node-v6.3.1-linux-x64.tar.xz 
+
+mv  node-v6.3.1-linux-x64.tar.gz /usr/local
+
+mv node-v6.3.1-linux-x64 node
+
+ln -fs /usr/local/node/bin/node /usr/bin
+
+ln -fs /usr/local/node/bin/npm /usr/bin
+
+node -version
+
+npm -version
+
+安装mongo-express
+
+npm install -g mongo-express
+
+cp /usr/local/node-v6.3.1/lib/node_modules/mongo-express/config.default.js ../config.js 
+
+修改
+vi config.js
+mongo数据库连接
+
+  mongo = {
+    db:       'airag',
+    host:     '172.18.0.4',
+    password: 'channel',
+    port:     27017,
+    ssl:      false,
+    url:      'mongodb://localhost:27017/db',
+    username: 'dbread',
+  };
+
+监听地址localhost改成0.0.0.0，也可修改port
+
+
+    cookieSecret:     process.env.ME_CONFIG_SITE_COOKIESECRET   || 'cookiesecret',
+    host:             process.env.VCAP_APP_HOST                 || '0.0.0.0',
+    port:             process.env.VCAP_APP_PORT                 || 8848,
+    requestSizeLimit: process.env.ME_CONFIG_REQUEST_SIZE        || '50mb',
+    sessionSecret:    process.env.ME_CONFIG_SITE_SESSIONSECRET  || 'sessionsecret',
+    sslCert:          process.env.ME_CONFIG_SITE_SSL_CRT_PATH   || '',
+    sslEnabled:       process.env.ME_CONFIG_SITE_SSL_ENABLED    || false,
+    sslKey:           process.env.ME_CONFIG_SITE_SSL_KEY_PATH   || '',
+  },
+
+web页面管理员：
+  basicAuth: {
+    username: process.env.ME_CONFIG_BASICAUTH_USERNAME || 'admin',
+    password: process.env.ME_CONFIG_BASICAUTH_PASSWORD || 'airag!@#',
+  },
+
+
+
+ 启动服务：
+
+ nohup /usr/local/node-v6.3.1/bin/node /usr/local/node-v6.3.1/lib/node_modules/mongo-express/app.js > /tmp/node.log 2>&1 &

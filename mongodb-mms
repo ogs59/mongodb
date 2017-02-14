@@ -1,0 +1,22 @@
+mongodb-mms
+
+
+
+
+//认证模式
+/server/mongodb/bin/mongod --dbpath=/data/mongodb/data/monitor --logpath=/data/log/mongodb/monitor.log --logappend --auth --port=27017 --fork
+
+/server/mongodb/bin/mongod --dbpath=/data/mongodb/data/backup --logpath=/data/log/mongodb/backup.log --logappend --auth --port=27018 --fork
+
+
+//匿名模式
+
+/server/mongodb/bin/mongod --dbpath=/data/mongodb/data/monitor --logpath=/data/log/mongodb/monitor.log --logappend  --port=27017 --fork
+
+
+/server/mongodb/bin/mongod --dbpath=/data/mongodb/data/backup --logpath=/data/log/mongodb/backup.log --logappend --port=27018 --fork
+
+
+关闭mongodb
+
+mongod --shutdown --dbpath /data/mongodb/data

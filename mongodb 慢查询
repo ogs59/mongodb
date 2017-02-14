@@ -1,0 +1,50 @@
+mongodb 慢查询
+
+设置慢查询
+db.setProfilingLevel(1,500);  设置500ms，1代表只记录slowlog
+
+db.setProfilingLevel(2,500);  设置500ms，2代表记录所有操作。
+
+查看慢查询设置
+
+db.getProfilingStatus();
+
+显示如下：
+{ "was" : 2, "slowms" : 500 }
+
+查看最后一条日志信息
+db.system.profile.find().sort({$natural:-1})  
+
+PRIMARY> db.system.profile.find().sort({$natural:-1}) 
+{ "ts" : ISODate("2013-05-14T08:13:37.098Z"), "op" : "insert", "ns" : "test.tickets", "millis" : 0, "client" : "127.0.0.1", "user" : "" }
+{ "ts" : ISODate("2013-05-14T08:13:37.098Z"), "op" : "insert", "ns" : "test.tickets", "millis" : 0, "client" : "127.0.0.1", "user" : "" }
+{ "ts" : ISODate("2013-05-14T08:13:37.098Z"), "op" : "insert", "ns" : "test.tickets", "millis" : 0, "client" : "127.0.0.1", "user" : "" }
+PRIMARY>
+
+
+ts：时间戳
+op: 操作类型
+ns：执行操作的对象集合
+millis：操作所花时间，毫秒
+client: 执行操作的客户端
+user: 执行操作的mongodb连接用户
+
+
+也可以在启动时设置
+
+2.4 可以在mongodb启动之初设置slow生效
+直接加在启动命令中：mongod --profile=1 --slowms=15
+或在配置文件中写好 用-f强制加载配置文件启动mongodb
+
+当profile表过小时，调整表大小为4MB 
+
+db.setProfilingLevel(0)   -- profile失效
+db.system.profile.drop()   -- 删除
+db.createCollection( "system.profile", { capped: true, size:4000000 } )    -- 重建
+db.setProfilingLevel(1)  -- profile生效
+
+
+显示结果分析，查询大于5毫秒的slow command。
+
+db.system.profile.find( { millis : { $gt : 5 } } ).pretty();
+

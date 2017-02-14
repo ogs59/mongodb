@@ -1,0 +1,95 @@
+
+主从同步通过复制主节点的oplog来同步。
+
+oplog是json文档。
+	ts：8字节时间戳  i:计数器
+	h:  此操作独一无二的id
+	v:  oplog的版本
+	op：操作类型  insert,update,delete,c db cmd,null
+	ns：操作所处的命名空间 db_name.coll_name
+	o： 操作对应的文档,文档在更新前的状态
+	o2: 仅update操作时有，更新操作的变更条件	
+	b:  bool值  删除时，才有	
+
+{ "ts" : {t:134798245600,i:1},  			  //在时间戳134798245600，第一次操作。
+"h" : NumberLong("12393981238913"),			  //
+"op" : "n",
+"ns" : "",
+"o" : {"msg":"Reconfig set","version" :4}}    
+
+
+
+
+db.oplog.rs.find().sort({$natural:-1}).limit(1).pretty()
+
+
+逻辑删除：
+	改名，插入到其他集合，备份等。
+
+oplog:
+	封顶表 Capped collection滚动覆盖写入,固定大小。
+	Sort({$natural:1})
+
+	db.createCollection(
+	"coll_name",
+	{capped:true,size:5242880})
+
+
+	{capped:true,size:5242880,max:5000})
+or  {capped:true,size:1024*1024*1024*8,max:5000}) 
+
+    满足大小或者条目数就覆盖，一般不设置max条目
+	size：bytes		max:条数 
+
+
+oplog大小和意义
+
+默认大小：
+	64位Linux，windows操作系统当前可用分区的5%，体积最大50G
+	--oplogSize=4096 (mb)
+
+
+复制时间窗口：
+	安装记录条数封顶
+	按照文件体积封顶
+
+复制集初始化同步过程
+
+已存在的复制集，新增节点初始化过程
+
+1.检查本机的oplog
+2.标记同步源oplog中最新的操作为start点
+3.drop本机所有数据，复制同步源（clone）所有数据到本地
+4.建立索引
+5.标记同步源oplog中最新的操作为minvaild
+6.执行同步源oplog中start点到minvaild点的所有按操
+7.成为正常的复制集成员
+
+	
+rs.add
+
+rs.addArb
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

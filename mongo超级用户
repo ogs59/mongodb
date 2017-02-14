@@ -1,0 +1,174 @@
+1. 创建一个不受访问限制的超级用户
+
+use admin
+db.createUser(
+{
+   user:"root",
+   pwd:"www.ttlsa.com",
+   roles:["root"]
+}
+)
+1
+2
+3
+4
+5
+6
+7
+8
+	
+use admin
+db.createUser(
+{
+   user:"root",
+   pwd:"www.ttlsa.com",
+   roles:["root"]
+}
+)
+
+2. 创建一个超级用户
+
+超级用户的role有两种，userAdmin和userAdminAnyDatabase
+use admin 
+db.createUser( 
+{
+    user: "admin",
+    pwd: "www.ttlsa.com",
+    roles:[
+        {
+             role: "userAdminAnyDatabase",
+             db: "admin"
+        }]
+}
+)
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+	
+use admin 
+db.createUser( 
+{
+    user: "admin",
+    pwd: "www.ttlsa.com",
+    roles:[
+        {
+             role: "userAdminAnyDatabase",
+             db: "admin"
+        }]
+}
+)
+
+db是指定数据库的名字，admin是管理数据库。
+3. 创建普通用户
+
+use admin
+db.createUser(
+{
+    user:"dev",
+    pwd:"www.ttlsa.com",
+    roles:[
+        {role:"read",db:"db01"},
+        {role:"read",db:"db02"},
+        {role:"read",db:"db03"}
+    ]
+}
+)
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+	
+use admin
+db.createUser(
+{
+    user:"dev",
+    pwd:"www.ttlsa.com",
+    roles:[
+        {role:"read",db:"db01"},
+        {role:"read",db:"db02"},
+        {role:"read",db:"db03"}
+    ]
+}
+)
+
+4. 查看当前用户权限
+
+db.runCommand(
+{
+   usersInfo:"userName",
+   showPrivileges:true
+}
+)
+1
+2
+3
+4
+5
+6
+	
+db.runCommand(
+{
+   usersInfo:"userName",
+   showPrivileges:true
+}
+)
+
+只能查看当前数据库中的用户，哪怕当前数据库admin数据库，也只能查看admin数据库中创建的用户。
+5. 修改用户密码
+
+use admin
+db.changeUserPassword("username", "xxx")
+1
+2
+	
+use admin
+db.changeUserPassword("username", "xxx")
+
+6. 查看用户信息
+
+db.runCommand({usersInfo:"userName"})
+1
+	
+db.runCommand({usersInfo:"userName"})
+
+7. 修改用户密码和用户信息
+
+db.runCommand(
+{
+    updateUser:"username",
+    pwd:"xxx",
+    customData:{title:"xxx"}
+}
+)
+1
+2
+3
+4
+5
+6
+7
+	
+db.runCommand(
+{
+    updateUser:"username",
+    pwd:"xxx",
+    customData:{title:"xxx"}
+}
+)

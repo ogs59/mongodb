@@ -1,0 +1,32 @@
+
+1.安装前提
+
+yum install PyYAML
+
+yum install python-requests
+
+yum install pymongo
+
+pip install --upgrade pymongo  /升级到3.2.2
+
+
+2. 数据库权限
+
+admin 库下面创建一个clusterAdmin角色的用户
+
+db.createUser({
+user:"monitor",
+pwd:"channel",
+roles:
+[ 
+  
+    {
+    role:"clusterAdmin",
+    db:"admin"
+  }
+]})
+
+
+crontab -e
+
+*/1 * * * * cd /server/open-falcon/mongomon/bin/ && python  mongodb_monitor.py  > /data/log/open-falcon/mongodb.log

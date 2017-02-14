@@ -1,0 +1,48 @@
+db.createUser(
+ {
+   user: "admin",
+   pwd: "channel",
+   roles: [
+      { role: "userAdminAnyDatabase", db: "admin" },
+   ]
+ }
+)
+
+db.createUser(
+ {
+   user: "carl",
+   pwd: "channel",
+   roles: [
+      { role: "owner", db: "admin" },
+   ]
+ }
+)
+
+
+
+
+db.createUser({
+user:"xqq",
+pwd:"channel",
+roles:
+[ 
+  
+    {
+    role:"root",
+    db:"admin"
+  }
+]})
+
+
+
+db.createUser({
+user:"dbread",
+pwd:"channel",
+roles:
+[ 
+  
+    {
+    role:"read",
+    db:"airag"
+  }
+]})
